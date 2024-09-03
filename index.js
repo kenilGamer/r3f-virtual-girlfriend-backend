@@ -41,13 +41,11 @@ const lipSyncMessage = async (message) => {
   console.log(`Starting conversion for message ${message}`);
   await execCommand(
     `ffmpeg -y -i audios/message_${message}.mp3 audios/message_${message}.wav`
-    // -y to overwrite the file
   );
   console.log(`Conversion done in ${new Date().getTime() - time}ms`);
   await execCommand(
     `./bin/rhubarb -f json -o audios/message_${message}.json audios/message_${message}.wav -r phonetic`
   );
-  // -r phonetic is faster but less accurate
   console.log(`Lip sync done in ${new Date().getTime() - time}ms`);
 };
 
@@ -118,7 +116,7 @@ app.post("/chat", async (req, res) => {
         role: "user",
         content: userMessage || "Hello",
       },
-    ],
+    ], 
   });
   let messages = JSON.parse(completion.choices[0].message.content);
   if (messages.messages) {
@@ -137,7 +135,7 @@ app.post("/chat", async (req, res) => {
   }
 
   res.send({ messages });
-});
+}); 
 
 const readJsonTranscript = async (file) => {
   const data = await fs.readFile(file, "utf8");
